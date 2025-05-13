@@ -12,24 +12,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID_PROD}}
-          aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY_PROD}}
-          aws-region: us-west-1
-      - name: Build SDK
-        run: cd sdk-ts && npm install --force && NODE_ENV=production CI=false NODE_OPTIONS=--openssl-legacy-provider npm run build --verbose
-      - name: Build App
-        run: cd front-end && npm install --force && NODE_ENV=production CI=false NODE_OPTIONS=--openssl-legacy-provider npm run build --verbose
-      - name: Deploy app build to S3 bucket
-        run: aws s3 sync ./front-end/dist/ s3://marketing-coz/prod/products/props/apps/props_collection --delete
-        # Invalidate Cloudfront (this action)
-      #- name: invalidate
-      #  uses: chetan/invalidate-cloudfront-action@master
-      #  env:
-      #    DISTRIBUTION: ${{secrets.CLOUDFRONT_DISTRIBUTION_STAGE}}
-      #    PATHS: '/*'
-      #    AWS_REGION: 'us-west-1'
-      #    AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID_PROD}}
-      #    AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY_PROD}}
+          project-id: ${{secrets.PROJECT_ID}}
+          another-secret: ${{secrets.ANOTHER_SECRET}}
+      - name: Echo SDK
+        run: ECHO $project-id $another-secret $ANOTHER_SECRET
